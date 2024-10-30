@@ -86,8 +86,8 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
 
 def create_wordcloud(text, title):
     wordcloud = WordCloud(
-        width=600,  # Ajustado para hacer los wordclouds más pequeños
-        height=300,  # Ajustado para hacer los wordclouds más pequeños
+        width=800,  # Ajustado para hacer los wordclouds más pequeños
+        height=400,  # Ajustado para hacer los wordclouds más pequeños
         background_color="white",
         contour_color='black',
         contour_width=2,
@@ -110,12 +110,15 @@ def main():
     st.markdown("")
     st.markdown("")
 
+    # Conectar a Google Drive y Sheets
     drive_service, sheets_service = get_google_services()
     spreadsheet_id = "1kkpKzDOkwJ58vgvp0IIAhS-yOSJxId8VJ4Bjxj7MmJk"
     range_name = "Sheet1!A1:I"
 
-    refresh_interval = 60
+    # Configurar el tiempo de actualización
+    refresh_interval = 600
 
+    # Crear contenedores para cada grupo y tipo de gráfico
     col1, spacer, col2 = st.columns([1, 0.2, 1])
 
     # Títulos de las columnas
@@ -128,13 +131,26 @@ def main():
 
     last_update_text = st.empty()
 
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+    # Añadir un texto debajo de la imagen
+    st.markdown("<p style='text-align: left;'>Participate with the QR below:</p>", unsafe_allow_html=True)
+
+    # Mostrar la imagen en la parte inferior
+    if qr_image_path.exists():
+        st.image(str(qr_image_path), width=100)#use_column_width=True)
+    else:
+        st.error(f"Error: La imagen '{qr_image_path}' no se encuentra.")
+
     while True:
         # Cargar los datos
         data = load_data_from_sheet(spreadsheet_id, range_name, sheets_service)
         if data is not None:
+            # Filtrar los datos para los grupos
             older_data = data[data['Group'] == 'older']
             neutral_data = data[data['Group'] == 'neutral']
 
+            # Juntar tags y words para cada grupo
             older_text = " ".join(older_data["Tags"].dropna()) + " " + " ".join(older_data["Words"].dropna())
             neutral_text = " ".join(neutral_data["Tags"].dropna()) + " " + " ".join(neutral_data["Words"].dropna())
 
@@ -142,13 +158,16 @@ def main():
             neutral_style = "<div style='margin-left: 20px; margin-right: -20px;'>"
             older_style = "<div style='margin-left: -20px; margin-right: 20px;'>"
 
+            # Actualizar plot para el grupo "neutral"
             with neutral_word_plot:
                 neutral_word_plot.pyplot(create_wordcloud(neutral_text, ""))
 
+            # Actualizar plot para el grupo "older"
             with older_word_plot:
                 older_word_plot.pyplot(create_wordcloud(older_text, ""))
 
-            st.markdown("<br><br><br>", unsafe_allow_html=True)
+            # Añadir más espacio después de los wordclouds
+            #st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
 
             # Actualizar el texto de la última actualización
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -156,14 +175,7 @@ def main():
             st.markdown("")
             last_update_text.markdown(f"<h6 style='text-align: center;'>Last update: {current_time}</h6>", unsafe_allow_html=True)
 
-
-            st.markdown("<p style='text-align: left;'>Participate with the QR below:</p>", unsafe_allow_html=True)
-
-            if qr_image_path.exists():
-                st.image(str(qr_image_path), width=100)#use_column_width=True)
-            else:
-                st.error(f"Error: La imagen '{qr_image_path}' no se encuentra.")
-
+            # Esperar el tiempo de actualización
             time.sleep(refresh_interval)
         else:
             st.warning("No se pudo cargar ningún dato. Revisa la conexión.")
