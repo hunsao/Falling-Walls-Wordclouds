@@ -138,7 +138,7 @@ def main():
 
     # Configurar el tiempo de actualización
     #refresh_interval = st.slider("Intervalo de actualización (segundos)", 10, 300, 60)
-    refresh_interval = 60
+    refresh_interval = 600
 
     # Crear contenedores vacíos para cada grupo y cada tipo de gráfico
     col1, col2 = st.columns(2)
