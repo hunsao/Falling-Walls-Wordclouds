@@ -76,9 +76,9 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
                 st.warning("Los datos no contienen suficientes columnas. Verifica el rango y el contenido del spreadsheet.")
                 return None
             
-            # Seleccionar las columnas G y H (índices 6 y 7)
-            data = data.iloc[:, [5, 7, 8]]
-            data.columns = ['Group','Tags', 'Words']  # Renombrar columnas
+            #Seleccionar las columnas G y H (índices 6 y 7) + grup
+            data = data.iloc[:, [4, 6, 7]]
+            data.columns = ['Group','Tags', 'Words']  
             return data
     except Exception as e:
         st.error(f"Error al cargar datos de Google Sheets: {str(e)}")
@@ -86,8 +86,8 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
 
 def create_wordcloud(text, title):
     wordcloud = WordCloud(
-        width=800,  # Ajustado para hacer los wordclouds más pequeños
-        height=400,  # Ajustado para hacer los wordclouds más pequeños
+        width=800,  
+        height=400,  
         background_color="white",
         contour_color='black',
         contour_width=2,
@@ -110,18 +110,14 @@ def main():
     st.markdown("")
     st.markdown("")
 
-    # Conectar a Google Drive y Sheets
     drive_service, sheets_service = get_google_services()
     spreadsheet_id = "1kkpKzDOkwJ58vgvp0IIAhS-yOSJxId8VJ4Bjxj7MmJk"
     range_name = "Sheet1!A1:I"
 
-    # Configurar el tiempo de actualización
     refresh_interval = 600
 
-    # Crear contenedores para cada grupo y tipo de gráfico
     col1, spacer, col2 = st.columns([1, 0.2, 1])
 
-    # Títulos de las columnas
     col1.markdown("<h3 style='text-align: center;'>People</h3>", unsafe_allow_html=True)
     col2.markdown("<h3 style='text-align: center;'>Older People</h3>", unsafe_allow_html=True)
 
@@ -133,20 +129,16 @@ def main():
 
     st.markdown("<br><br><br>", unsafe_allow_html=True)
 
-    # Añadir un texto debajo de la imagen
     st.markdown("<p style='text-align: left;'>Participate with the QR below:</p>", unsafe_allow_html=True)
 
-    # Mostrar la imagen en la parte inferior
     if qr_image_path.exists():
         st.image(str(qr_image_path), width=100)#use_column_width=True)
     else:
         st.error(f"Error: La imagen '{qr_image_path}' no se encuentra.")
 
     while True:
-        # Cargar los datos
         data = load_data_from_sheet(spreadsheet_id, range_name, sheets_service)
         if data is not None:
-            # Filtrar los datos para los grupos
             older_data = data[data['Group'] == 'older']
             neutral_data = data[data['Group'] == 'neutral']
 
@@ -166,16 +158,13 @@ def main():
             with older_word_plot:
                 older_word_plot.pyplot(create_wordcloud(older_text, ""))
 
-            # Añadir más espacio después de los wordclouds
             #st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
 
-            # Actualizar el texto de la última actualización
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             st.markdown("")
             st.markdown("")
             last_update_text.markdown(f"<h6 style='text-align: center;'>Last update: {current_time}</h6>", unsafe_allow_html=True)
 
-            # Esperar el tiempo de actualización
             time.sleep(refresh_interval)
         else:
             st.warning("No se pudo cargar ningún dato. Revisa la conexión.")
