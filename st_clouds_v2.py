@@ -113,7 +113,7 @@ def main():
 
     drive_service, sheets_service = get_google_services()
     spreadsheet_id = "1kkpKzDOkwJ58vgvp0IIAhS-yOSJxId8VJ4Bjxj7MmJk"
-    range_name = "Sheet1!A1:I"
+    range_name = "Sheet1!A1:H"
 
     refresh_interval = 600
 
