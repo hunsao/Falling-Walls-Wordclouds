@@ -77,7 +77,8 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
             #     return None
             
             #Seleccionar las columnas G y H (índices 6 y 7) + grup
-            data = data.iloc[:, [4, 6, 7]]
+            #data = data.iloc[:, [4, 6, 7]]
+            data = data[['E', 'G', 'H']]
             data.columns = ['Group','Tags', 'Words']  
             return data
     except Exception as e:
