@@ -71,10 +71,10 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
         else:
             data = pd.DataFrame(values[1:], columns=values[0])
             
-            # Verificar que hay suficientes columnas y seleccionar solo G y H
-            if data.shape[1] < 8:
-                st.warning("Los datos no contienen suficientes columnas. Verifica el rango y el contenido del spreadsheet.")
-                return None
+            # # Verificar que hay suficientes columnas y seleccionar solo G y H
+            # if data.shape[1] < 8:
+            #     st.warning("Los datos no contienen suficientes columnas. Verifica el rango y el contenido del spreadsheet.")
+            #     return None
             
             #Seleccionar las columnas G y H (índices 6 y 7) + grup
             data = data.iloc[:, [4, 6, 7]]
