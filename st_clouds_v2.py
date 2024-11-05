@@ -69,17 +69,14 @@ def load_data_from_sheet(spreadsheet_id, range_name, sheets_service):
             st.warning("No se encontraron datos en la hoja de cálculo.")
             return None
         else:
-            data = pd.DataFrame(values[1:], columns=values[0])
-            
-            # Verificar que hay suficientes columnas y seleccionar solo G y H
+            data = pd.DataFrame(values)
+
             if data.shape[1] < 8:
                 st.warning("Los datos no contienen suficientes columnas. Verifica el rango y el contenido del spreadsheet.")
                 return None
             
-            #Seleccionar las columnas G y H (índices 6 y 7) + grup
-            data = data.iloc[:, [4, 6, 7]]
-            #data = data[['E', 'G', 'H']]
-            data.columns = ['Group','Tags', 'Words']  
+            data = data.iloc[:, [4, 6, 7]]  # Columnas E, G y H (índices 4, 6, 7)
+            data.columns = ['Group', 'Tags', 'Words']  # Renombrar columnas
             return data
     except Exception as e:
         st.error(f"Error al cargar datos de Google Sheets: {str(e)}")
