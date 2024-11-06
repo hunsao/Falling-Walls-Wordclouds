@@ -88,7 +88,7 @@ def create_wordcloud(text, title):
         height=400,  
         background_color="white",
         contour_color='black',
-        contour_width=15,
+        contour_width=1,
         colormap="RdBu_r",
         stopwords=None,
     ).generate(text)
