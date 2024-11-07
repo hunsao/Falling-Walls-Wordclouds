@@ -112,7 +112,7 @@ def main():
     spreadsheet_id = "1kkpKzDOkwJ58vgvp0IIAhS-yOSJxId8VJ4Bjxj7MmJk"
     range_name = "Sheet1!A1:H"
 
-    refresh_interval = 600
+    refresh_interval = 60
 
     col1, spacer, col2 = st.columns([1, 0.2, 1])
 
@@ -125,7 +125,7 @@ def main():
 
     last_update_text = st.empty()
 
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
     st.markdown("<p style='text-align: left;'>Participate with the QR below:</p>", unsafe_allow_html=True)
 
