@@ -116,8 +116,8 @@ def main():
 
     col1, spacer, col2 = st.columns([1, 0.2, 1])
 
-    col1.markdown("<h3 style='text-align: center;'>Prompts with "people"</h3>", unsafe_allow_html=True)
-    col2.markdown("<h3 style='text-align: center;'>Prompts with "older people"</h3>", unsafe_allow_html=True)
+    col1.markdown("<h3 style='text-align: center;'>Prompts with 'people'</h3>", unsafe_allow_html=True)
+    col2.markdown("<h3 style='text-align: center;'>Prompts with 'older people'</h3>", unsafe_allow_html=True)
 
     # Contenedores para wordclouds
     neutral_word_plot = col1.empty()
